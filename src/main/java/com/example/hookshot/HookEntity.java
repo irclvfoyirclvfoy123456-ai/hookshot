@@ -47,6 +47,7 @@ public class HookEntity extends Entity implements Leashable, ItemSupplier {
 	private UUID targetId;
 	private State state = State.FLYING;
 	private Vec3 anchor = Vec3.ZERO;
+	private Vec3 flightVelocity = Vec3.ZERO;
 	private boolean reel;
 	private int attachedTicks;
 	private Leashable.LeashData leashData;
@@ -59,14 +60,17 @@ public class HookEntity extends Entity implements Leashable, ItemSupplier {
 		this.ownerId = owner.getUUID();
 		this.reel = reelMode;
 		this.setPos(pos.x, pos.y, pos.z);
-		this.setDeltaMovement(dir.normalize().scale(FLIGHT_SPEED));
+		this.flightVelocity = dir.normalize().scale(FLIGHT_SPEED);
+		this.setDeltaMovement(this.flightVelocity);
 	}
 
 	// ------------------------------------------------------------------ Leashable (rope rendering)
 
 	@Override
 	public Leashable.LeashData getLeashData() {
-		return this.leashData;
+		// Server: report "no leash" so vanilla's lead logic (elastic pull, snapping at ~12 blocks, dropping a lead
+		// item) never touches the hook. Client: real data, so the rope is drawn.
+		return this.level().isClientSide() ? this.leashData : null;
 	}
 
 	@Override
@@ -150,7 +154,7 @@ public class HookEntity extends Entity implements Leashable, ItemSupplier {
 
 	private void flyTick(ServerLevel level, ServerPlayer owner) {
 		Vec3 from = this.position();
-		Vec3 to = from.add(this.getDeltaMovement());
+		Vec3 to = from.add(this.flightVelocity);
 
 		BlockHitResult blockHit = level.clip(new ClipContext(from, to,
 				ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
