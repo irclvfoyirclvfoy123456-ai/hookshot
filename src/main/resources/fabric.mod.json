@@ -1,0 +1,20 @@
+{
+	"schemaVersion": 1,
+	"id": "hookshot",
+	"version": "${version}",
+	"name": "Hookshot Crossbow",
+	"description": "Grappling-hook crossbow. Fire a hook, ride the rope smoothly, auto-reload. The rope is rendered with the vanilla lead.",
+	"authors": ["you"],
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["com.example.hookshot.HookshotMod"],
+		"client": ["com.example.hookshot.client.HookClient"]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
