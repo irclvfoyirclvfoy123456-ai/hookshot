@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -17,7 +16,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.item.CreativeModeTabs;
 
 public class HookshotMod implements ModInitializer {
 	public static final String MOD_ID = "hookshot";
@@ -52,8 +50,6 @@ public class HookshotMod implements ModInitializer {
 		});
 
 		ServerTickEvents.END_SERVER_TICK.register(HookshotMod::tickReload);
-
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.COMBAT).register(entries -> entries.accept(ModItems.HOOKSHOT));
 	}
 
 	/** Auto reload: when the cooldown ends, play the "loaded" click and a small spark effect. */
