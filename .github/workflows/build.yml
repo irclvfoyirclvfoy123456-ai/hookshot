@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,7 +25,9 @@ jobs:
       - name: Build
         run: gradle build --no-daemon
 
-      - uses: actions/upload-artifact@v4
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
         with:
-          name: hookshot-mod
-          path: build/libs/hookshot-*[0-9].jar
+          tag_name: build-${{ github.run_number }}
+          name: Hookshot build ${{ github.run_number }}
+          files: build/libs/hookshot-*[0-9].jar
